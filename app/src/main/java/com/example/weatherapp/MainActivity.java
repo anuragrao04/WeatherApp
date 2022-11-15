@@ -22,11 +22,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     EditText etCity, etCountry;
     TextView tvResult;
-    private final String url = "http://api.openweathermap.org/data/2.5/forecast?";
+    private final String url = "http://api.openweathermap.org/data/2.5/forecast";
     private final String appid = "c9d36b91db136d84f018293af456fc77";
     DecimalFormat df = new DecimalFormat("#.##");
 
@@ -57,31 +60,35 @@ public class MainActivity extends AppCompatActivity {
                 public void onResponse(String response) {
                     String output = "";
                     try {
-                        JSONObject jsonResponse = new JSONObject(response);
-                        JSONArray jsonArray = jsonResponse.getJSONArray("weather");
-                        JSONObject jsonObjectWeather = jsonArray.getJSONObject(0);
-                        String description = jsonObjectWeather.getString("description");
-                        JSONObject jsonObjectMain = jsonResponse.getJSONObject("main");
-                        double temp = jsonObjectMain.getDouble("temp") - 273.15;
-                        double feelsLike = jsonObjectMain.getDouble("feels_like") - 273.15;
-                        float pressure = jsonObjectMain.getInt("pressure");
-                        int humidity = jsonObjectMain.getInt("humidity");
-                        JSONObject jsonObjectWind = jsonResponse.getJSONObject("wind");
-                        String wind = jsonObjectWind.getString("speed");
-                        JSONObject jsonObjectClouds = jsonResponse.getJSONObject("clouds");
-                        String clouds = jsonObjectClouds.getString("all");
-                        JSONObject jsonObjectSys = jsonResponse.getJSONObject("sys");
-                        String countryName = jsonObjectSys.getString("country");
-                        String cityName = jsonResponse.getString("name");
+                        JSONObject jsonObj = new JSONObject(response);
+                        JSONObject main = jsonObj.getJSONObject("main");
+                        JSONObject weather = jsonObj.getJSONArray("weather").getJSONObject(0);
+                        JSONObject wind = jsonObj.getJSONObject("wind");
+                        JSONObject sys = jsonObj.getJSONObject("sys");
+
+
+                        String city_name = jsonObj.getString("name");
+                        String countryname = sys.getString("country");
+                        String temperature = main.getString("temp");
+                        String cast = weather.getString("description");
+                        String humidity = main.getString("humidity");
+
+                        String pre = main.getString("pressure");
+                        String windspeed = wind.getString("speed");
+                        Long rise = sys.getLong("sunrise");
+                        String sunrise = new SimpleDateFormat("hh:mm a", Locale.ENGLISH).format(new Date(rise * 1000));
+                        Long set = sys.getLong("sunset");
+                        String sunset = new SimpleDateFormat("hh:mm a", Locale.ENGLISH).format(new Date(set * 1000));
+
                         tvResult.setTextColor(Color.rgb(68, 134, 199));
-                        output += "Current weather of " + cityName + " (" + countryName + ")"
-                                + "\n Temp: " + df.format(temp) + " °C"
-                                + "\n Feels Like: " + df.format(feelsLike) + " °C"
+                        output += "Current weather of " + city_name + " (" + countryname + ")"
+                                + "\n Temp: " + df.format(temperature) + " °C"
                                 + "\n Humidity: " + humidity + "%"
-                                + "\n Description: " + description
-                                + "\n Wind Speed: " + wind + "m/s (meters per second)"
-                                + "\n Cloudiness: " + clouds + "%"
-                                + "\n Pressure: " + pressure + " hPa";
+                                + "\n Description: " + cast
+                                + "\n Wind Speed: " + windspeed + "m/s (meters per second)"
+                                + "\n Sunrise: " + sunrise + "%"
+                                + "\n Sunset: " + sunset + "%"
+                                + "\n Pressure: " + pre + " hPa";
                         tvResult.setText(output);
                     } catch (JSONException e) {
                         e.printStackTrace();
