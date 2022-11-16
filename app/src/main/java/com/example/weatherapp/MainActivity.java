@@ -17,21 +17,18 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONArray;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+
 
 public class MainActivity extends AppCompatActivity {
     EditText etCity, etCountry;
     TextView tvResult;
     private final String url = "http://api.openweathermap.org/data/2.5/forecast";
     private final String appid = "c9d36b91db136d84f018293af456fc77";
-    DecimalFormat df = new DecimalFormat("#.##");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,9 +47,9 @@ public class MainActivity extends AppCompatActivity {
             tvResult.setText("City field cannot be empty!");
         } else {
             if (!country.equals("")) {
-                tempurl = url + "?q=" + city + "," + country + "&appid=" + appid;
+                tempurl = url + "?q=" + city + "," + country + "&appid=" + appid + "&units=metric";
             } else {
-                tempurl = url + "?q=" + city + "&appid=" + appid;
+                tempurl = url + "?q=" + city + "&appid=" + appid + "&units=metric";
             }
 
             StringRequest stringRequest = new StringRequest(Request.Method.GET, tempurl, new Response.Listener<String>() {
@@ -60,34 +57,27 @@ public class MainActivity extends AppCompatActivity {
                 public void onResponse(String response) {
                     String output = "";
                     try {
-                        JSONObject jsonObj = new JSONObject(response);
+                        JSONObject jsonObj = new JSONObject(response).getJSONArray("list").getJSONObject(0);
+
                         JSONObject main = jsonObj.getJSONObject("main");
                         JSONObject weather = jsonObj.getJSONArray("weather").getJSONObject(0);
                         JSONObject wind = jsonObj.getJSONObject("wind");
                         JSONObject sys = jsonObj.getJSONObject("sys");
 
-
-                        String city_name = jsonObj.getString("name");
-                        String countryname = sys.getString("country");
                         String temperature = main.getString("temp");
                         String cast = weather.getString("description");
                         String humidity = main.getString("humidity");
 
                         String pre = main.getString("pressure");
                         String windspeed = wind.getString("speed");
-                        Long rise = sys.getLong("sunrise");
-                        String sunrise = new SimpleDateFormat("hh:mm a", Locale.ENGLISH).format(new Date(rise * 1000));
-                        Long set = sys.getLong("sunset");
-                        String sunset = new SimpleDateFormat("hh:mm a", Locale.ENGLISH).format(new Date(set * 1000));
 
-                        tvResult.setTextColor(Color.rgb(68, 134, 199));
-                        output += "Current weather of " + city_name + " (" + countryname + ")"
-                                + "\n Temp: " + df.format(temperature) + " °C"
+                        tvResult.setTextColor(Color.BLACK);
+                        tvResult.setTextSize(20);
+                        output += "Current weather:"
+                                + "\n Temp: " + temperature + " °C"
                                 + "\n Humidity: " + humidity + "%"
                                 + "\n Description: " + cast
-                                + "\n Wind Speed: " + windspeed + "m/s (meters per second)"
-                                + "\n Sunrise: " + sunrise + "%"
-                                + "\n Sunset: " + sunset + "%"
+                                + "\n Wind Speed: " + windspeed + "m/s"
                                 + "\n Pressure: " + pre + " hPa";
                         tvResult.setText(output);
                     } catch (JSONException e) {
