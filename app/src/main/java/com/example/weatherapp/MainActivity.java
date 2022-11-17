@@ -1,9 +1,12 @@
 package com.example.weatherapp;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,7 +42,10 @@ public class MainActivity extends AppCompatActivity {
         tvResult = findViewById(R.id.tvResult);
     }
 
+
     public void getWeatherDetails(View view) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
         String tempurl = "";
         String city = etCity.getText().toString().trim();
         String country = etCountry.getText().toString().trim();
