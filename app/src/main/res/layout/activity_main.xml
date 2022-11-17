@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
     android:background="@drawable/background"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    tools:context=".MainActivity">
 
     <TextView
         android:layout_width="wrap_content"
@@ -19,14 +19,14 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical">
 
         <EditText
             android:id="@+id/etCity"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:layout_marginBottom="10dp"
             android:ems="10"
             android:hint="Enter City Name"
@@ -36,7 +36,7 @@
         <EditText
             android:id="@+id/etCountry"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:layout_marginBottom="10dp"
             android:ems="10"
             android:hint="Enter Country Code (Optional)"
@@ -45,7 +45,7 @@
         <Button
             android:id="@+id/btnGet"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:layout_marginBottom="10dp"
             android:background="#1E69A3"
             android:backgroundTint="@null"
@@ -63,6 +63,6 @@
                 android:layout_height="wrap_content" />
         </ScrollView>
 
-</LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>
