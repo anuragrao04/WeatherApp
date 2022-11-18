@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
 
                         tvResult.setTextColor(Color.BLACK);
                         tvResult.setTextSize(20);
-                        output += "Current weather:"
+                        output += "\nCurrent weather:\n"
                                 + "\n Temp: " + temperature + " °C"
                                 + "\n Humidity: " + humidity + "%"
                                 + "\n Description: " + cast
